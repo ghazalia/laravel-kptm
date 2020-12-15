@@ -12,6 +12,6 @@ class TrainingController extends Controller
         $trainings = Training::all();
 
         // resources/views/trainings/index.blade.php
-        return view('trainings.index');
+        return view('trainings.index', compact('trainings'));
     }
 }
