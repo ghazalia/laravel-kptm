@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TrainingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,4 +23,6 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/trainings', [App\Http\Controllers\TrainingController::class, 'index']);
-Route::get('/users', [App\Http\Controllers\UserController::class, 'index']);
+Route::get('/trainings/create', [TrainingController::class, 'create']);
+Route::post('/trainings/create', [TrainingController::class, 'store']);
+Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->middleware('auth');
