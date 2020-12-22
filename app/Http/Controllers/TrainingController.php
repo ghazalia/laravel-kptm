@@ -2,18 +2,66 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use App\Models\Training;
+use Illuminate\Support\Facades\Storage;
 
 class TrainingController extends Controller
 {
     public function index()
     {
-        $trainings = Training::all();
+        // $trainings = Training::paginate();
         // dd($trainings);
 
+        $user = auth()->user();
+        $trainings = $user->trainings()->paginate(15);
         // resources/views/trainings/index.blade.php
+
         return view('trainings.index', compact('trainings'));
+    }
+
+    public function show($id)
+    {
+        $training = Training::find($id);
+
+        return view('trainings.show', compact('training'));
+    }
+
+    public function edit($id)
+    {
+        $training = Training::find($id);
+
+        return view('trainings.edit', compact('training'));
+    }
+
+    public function delete(Training $training)
+    {
+        if ($training->attachment) {
+            Storage::disk('public')->delete($training->attachment);
+        }
+        $training->delete();
+
+        return redirect()
+            ->route('training:list')
+            ->with([
+                'alert-type' => 'alert-danger',
+                'alert' => 'Your training has been deleted'
+            ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $training = Training::find($id);
+
+        $training->update($request->only('title', 'decription', 'trainer'));
+
+        return redirect()
+            ->route('training:list')
+            ->with([
+                'alert-type' => 'alert-success',
+                'alert' => 'Your training has been updated'
+            ]);
     }
 
     public function create()
@@ -33,6 +81,24 @@ class TrainingController extends Controller
         // store all data from form to trainings table
         //return to training index
 
-        return redirect('/trainings');
+        if($request->hasFile('attachment')) {
+//            rename file
+//            filename: id-2020-12-22.jpg
+            $filename = $training->id.'-'.date('Y-m-d')
+                . '.' . $request->attachment->getClientOriginalExtension();
+
+//            store file in stroge
+            Storage::disk('public')->put($filename, $request->attachment);
+
+//            update row with filename
+            $training->update(['attachment' => $filename]);
+        }
+
+        return redirect()
+            ->route('training:list')
+            ->with([
+                'alert-type' => 'alert-primary',
+                'alert' => "Your training has been created"
+            ]);
     }
 }
