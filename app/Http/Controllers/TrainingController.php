@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreTrainingRequest;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use App\Models\Training;
@@ -69,8 +70,17 @@ class TrainingController extends Controller
         return view('trainings.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreTrainingRequest $request)
     {
+//        validate request
+//        $this->validate(
+//            $request,
+//            [
+//                'title' => 'required|min:3',
+//                'description' => 'required',
+//            ]
+//        );
+
         $training = new Training();
         $training->title = $request->title;
         $training->description = $request->description;
