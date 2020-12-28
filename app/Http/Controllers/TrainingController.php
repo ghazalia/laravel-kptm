@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTrainingRequest;
 use Illuminate\Http\Request;
 use App\Models\Training;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class TrainingController extends Controller
@@ -113,6 +114,12 @@ class TrainingController extends Controller
 //            update row with filename
             $training->update(['attachment' => $filename]);
         }
+
+//        send email to user
+        Mail::send('email.training-created', [], function ($message) {
+        $message->to('ghaz745@gmail.com');
+        $message->subject('Training created email using inline email');
+    });
 
         return redirect()
             ->route('training:list')
