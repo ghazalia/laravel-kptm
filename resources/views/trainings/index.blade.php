@@ -44,9 +44,16 @@
                                 </td>
                                 <td> {{ $training->trainer }} </td>
                                 <!-- {{ url('training/' . $training->id) }}" -->
-                                <td><a class="btn btn-primary" href="{{ route('training:show', $training->id) }}">Show</a>
-                                    <a class="btn btn-secondary" href="{{ route('training:edit', $training->id) }}">Edit</a>
+                                <td>
+                                    @can('view', $training)
+                                        <a class="btn btn-primary" href="{{ route('training:show', $training->id) }}">Show</a>
+                                    @endcan
+                                    @can('update', $training)
+                                        <a class="btn btn-secondary" href="{{ route('training:edit', $training->id) }}">Edit</a>
+                                        @endcan
+                                    @can('delete', $training)
                                     <a class="btn btn-danger" href="{{ route('training:delete', $training->id) }}">Delete</a>
+                                    @endcan
                                 </td>
                             </tr> @endforeach </tbody>
                     </table>

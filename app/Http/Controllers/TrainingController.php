@@ -31,16 +31,19 @@ class TrainingController extends Controller
         } else {
 
             $user = auth()->user();
-            $trainings = $user->trainings()->paginate(15);
+//            $trainings = $user->trainings()->paginate(15);
             // resources/views/trainings/index.blade.php
+            $trainings=Training::paginate(15);
             }
 
         return view('trainings.index', compact('trainings'));
     }
 
-    public function show($id)
+    public function show(Training $training)
     {
-        $training = Training::find($id);
+        $this->authorize('view', $training); //authorization
+
+//        $training = Training::find($id);
 
         return view('trainings.show', compact('training'));
     }
@@ -49,11 +52,15 @@ class TrainingController extends Controller
     {
         $training = Training::find($id);
 
+        $this->authorize('update', $training);
+
         return view('trainings.edit', compact('training'));
     }
 
     public function delete(Training $training)
     {
+        $this->authorize('delete', $training);
+
         $user = auth()->user();
         Notification::send($user, new TrainingDeleted($training));
 
@@ -72,7 +79,10 @@ class TrainingController extends Controller
 
     public function update(Request $request, $id)
     {
+
         $training = Training::find($id);
+
+        $this->authorize('update', $training);
 
         $training->update($request->only('title', 'decription', 'trainer'));
 

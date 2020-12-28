@@ -22,8 +22,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/trainings', [App\Http\Controllers\TrainingController::class, 'index'])->name('training:list');
-Route::get('/training/{id}', [App\Http\Controllers\TrainingController::class, 'show'])->name('training:show');
+Route::get('/trainings', [App\Http\Controllers\TrainingController::class, 'index'])->name('training:list')->middleware('auth');
+Route::get('/training/{training}', [App\Http\Controllers\TrainingController::class, 'show'])->name('training:show');
 Route::get('/training/{id}/edit', [App\Http\Controllers\TrainingController::class, 'edit'])->name('training:edit');
 Route::get('/training/{training}/delete', [App\Http\Controllers\TrainingController::class, 'delete'])->name('training:delete');
 Route::post('/training/{id}', [App\Http\Controllers\TrainingController::class, 'update'])->name('training:update');
