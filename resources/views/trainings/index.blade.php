@@ -10,7 +10,18 @@
             </div>
             @endif
             <div class="card">
-                <div class="card-header">{{ __('Training Index') }}</div>
+                <div class="card-header">{{ __('Training Index') }}
+                    <div class="float-right">
+                        <form method="get" action="">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="keyword"/>
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="submit">Search</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
 
                 <div class="card-body">
                     <table>
@@ -39,7 +50,11 @@
                                 </td>
                             </tr> @endforeach </tbody>
                     </table>
-                    {{ $trainings->links()}}
+                    {{ $trainings
+                            ->appends([
+                                  'keyword' => request()->get('keyword')])
+                            ->links()
+                    }}
                 </div>
             </div>
         </div>

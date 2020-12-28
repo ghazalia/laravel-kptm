@@ -3,21 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTrainingRequest;
-use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use App\Models\Training;
 use Illuminate\Support\Facades\Storage;
 
 class TrainingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         // $trainings = Training::paginate();
         // dd($trainings);
+        if ($request->keyword) {
+            $search = $request->keyword;
 
-        $user = auth()->user();
-        $trainings = $user->trainings()->paginate(15);
-        // resources/views/trainings/index.blade.php
+//            $trainings = Training::where('title', 'LIKE', '%' . $search .'%')
+//                ->OrWhere('description', 'LIKE', '%' . $search .'%')
+//                ->paginate(10);
+            $trainings = auth()->user()->trainings()->where('title', 'LIKE', '%' . $search .'%')
+                ->OrWhere('description', 'LIKE', '%' . $search .'%')
+                ->paginate(10);
+        } else {
+
+            $user = auth()->user();
+            $trainings = $user->trainings()->paginate(15);
+            // resources/views/trainings/index.blade.php
+            }
 
         return view('trainings.index', compact('trainings'));
     }
