@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTrainingRequest;
+use App\Jobs\SendEmailJob;
 use Illuminate\Http\Request;
 use App\Models\Training;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+
 
 class TrainingController extends Controller
 {
@@ -125,7 +127,10 @@ class TrainingController extends Controller
 //    });
 
 //        send email using mailable
-        Mail::to('ghaz745@gmail.com')->send(new \App\Mail\TrainingCreated($training));
+//        Mail::to('ghaz745@gmail.com')->send(new \App\Mail\TrainingCreated($training));
+
+//        SendMail Queue
+        SendEmailJob::dispatch($training);
 
         return redirect()
             ->route('training:list')
