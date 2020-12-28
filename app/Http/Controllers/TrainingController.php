@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTrainingRequest;
 use App\Jobs\SendEmailJob;
-use Illuminate\Http\Request;
+use App\Notifications\TrainingCreated;
+use App\Notifications\TrainingDeleted;
 use App\Models\Training;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
+//use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -51,6 +54,9 @@ class TrainingController extends Controller
 
     public function delete(Training $training)
     {
+        $user = auth()->user();
+        Notification::send($user, new TrainingDeleted($training));
+
         if ($training->attachment) {
             Storage::disk('public')->delete($training->attachment);
         }
@@ -116,6 +122,10 @@ class TrainingController extends Controller
 //            update row with filename
             $training->update(['attachment' => $filename]);
         }
+
+//        send notification
+        $user = auth()->user();
+        Notification::send($user, new TrainingCreated($training));
 
 //        send email to user
 //        Mail::send('email.training-created',
