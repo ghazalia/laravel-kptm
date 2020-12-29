@@ -54,6 +54,9 @@
                                     @can('delete', $training)
                                     <a class="btn btn-danger" href="{{ route('training:delete', $training->id) }}">Delete</a>
                                     @endcan
+                                    @can('delete', $training)
+                                        <a class="btn btn-lg btn-danger" href="{{ route('training:forcedelete', $training->id) }}">Delete</a>
+                                    @endcan
                                 </td>
                             </tr> @endforeach </tbody>
                     </table>

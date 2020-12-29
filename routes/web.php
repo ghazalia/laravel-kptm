@@ -26,6 +26,7 @@ Route::get('/trainings', [App\Http\Controllers\TrainingController::class, 'index
 Route::get('/training/{training}', [App\Http\Controllers\TrainingController::class, 'show'])->name('training:show');
 Route::get('/training/{id}/edit', [App\Http\Controllers\TrainingController::class, 'edit'])->name('training:edit');
 Route::get('/training/{training}/delete', [App\Http\Controllers\TrainingController::class, 'delete'])->name('training:delete');
+Route::get('/training/{training}/forcedelete', [App\Http\Controllers\TrainingController::class, 'forceDelete'])->name('training:forcedelete');
 Route::post('/training/{id}', [App\Http\Controllers\TrainingController::class, 'update'])->name('training:update');
 Route::get('/trainings/create', [TrainingController::class, 'create'])->name('training:create');
 Route::post('/trainings/create', [TrainingController::class, 'store']);
